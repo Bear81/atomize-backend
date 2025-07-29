@@ -1,8 +1,13 @@
 from rest_framework import generics, permissions
-from .models import Habit
+from rest_framework.request import Request
+from django.utils.dateparse import parse_date
+from .models import Habit, LogEntry
 from .serializers import HabitSerializer, LogEntrySerializer
-from .models import LogEntry
 
+
+# ---------------------------
+# Habit Views
+# ---------------------------
 
 class HabitList(generics.ListCreateAPIView):
     serializer_class = HabitSerializer
@@ -14,6 +19,7 @@ class HabitList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
 class HabitDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HabitSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -22,15 +28,32 @@ class HabitDetail(generics.RetrieveUpdateDestroyAPIView):
         return Habit.objects.filter(owner=self.request.user)
 
 
+# ---------------------------
+# LogEntry Views
+# ---------------------------
+
 class LogEntryList(generics.ListCreateAPIView):
     serializer_class = LogEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return LogEntry.objects.filter(owner=self.request.user)
+        request: Request = self.request
+        queryset = LogEntry.objects.filter(owner=request.user)
+        habit_id = request.query_params.get('habit')
+        date_str = request.query_params.get('date')
+
+        if habit_id:
+            queryset = queryset.filter(habit__id=habit_id)
+        if date_str:
+            parsed_date = parse_date(date_str)
+            if parsed_date:
+                queryset = queryset.filter(timestamp__date=parsed_date)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
 
 class LogEntryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LogEntrySerializer

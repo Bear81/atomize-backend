@@ -8,12 +8,20 @@ class Habit(models.Model):
         ('monthly', 'Monthly'),
     ]
 
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+    ]
+
     owner = models.ForeignKey(
     User, on_delete=models.CASCADE, related_name='habits'
 )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     goal_type = models.CharField(max_length=20, choices=GOAL_CHOICES, default='daily')
+    frequency = models.CharField(max_length=50, blank=True)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -30,7 +38,7 @@ class LogEntry(models.Model):
 
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE, related_name='logs')
     owner = models.ForeignKey(
-    User, on_delete=models.CASCADE, related_name='log_entries'
+    User, on_delete=models.CASCADE, related_name='habit_log_entries'
 )
     timestamp = models.DateTimeField(auto_now_add=True)
     note = models.TextField(blank=True)

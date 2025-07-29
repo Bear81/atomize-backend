@@ -6,7 +6,11 @@ class HabitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Habit
-        fields = '__all__'
+        fields = [
+            'id', 'owner', 'title', 'description',
+            'goal_type', 'frequency', 'priority',
+            'is_active', 'created_at',
+        ]
 
 
 class LogEntrySerializer(serializers.ModelSerializer):

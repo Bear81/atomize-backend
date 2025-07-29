@@ -104,15 +104,25 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_CREDENTIALS = True
+
+REACT_APP_URL = os.environ.get("REACT_APP_URL")
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    os.environ.get("REACT_APP_URL", ""),  # optional for frontend URL on deployment
+    "https://atomize-backend-c71ff550658c.herokuapp.com",
 ]
+
+if REACT_APP_URL:
+    CORS_ALLOWED_ORIGINS.append(REACT_APP_URL)
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
-    os.environ.get("REACT_APP_URL", "").replace("https://", "http://"),
+    "https://atomize-backend-c71ff550658c.herokuapp.com",
 ]
+
+if REACT_APP_URL:
+    CSRF_TRUSTED_ORIGINS.append(REACT_APP_URL)
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

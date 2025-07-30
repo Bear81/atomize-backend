@@ -3,12 +3,16 @@ from rest_framework.request import Request
 from django.utils.dateparse import parse_date
 from .models import Habit, LogEntry
 from .serializers import HabitSerializer, LogEntrySerializer
+from rest_framework.request import Request
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 
 # ---------------------------
 # Habit Views
 # ---------------------------
 
+@method_decorator(csrf_exempt, name='dispatch')
 class HabitList(generics.ListCreateAPIView):
     serializer_class = HabitSerializer
     permission_classes = [permissions.IsAuthenticated]

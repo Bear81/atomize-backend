@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
+from accounts.views import CustomLogoutView
 
 @ensure_csrf_cookie
 def csrf_debug(request):
@@ -16,10 +17,11 @@ def root_route(request):
     return Response({"message": "Welcome to Atomize API 🚀"})
 
 urlpatterns = [
-    path('csrf/', csrf_debug),  # ✅ This line is key
+    path('csrf/', csrf_debug),
     path('', root_route),
     path('admin/', admin.site.urls),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    path("dj-rest-auth/logout/", CustomLogoutView.as_view(), name="custom_logout"),
     path('', include('habits.urls')),
 ]

@@ -36,6 +36,7 @@ class HabitDetail(generics.RetrieveUpdateDestroyAPIView):
 # LogEntry Views
 # ---------------------------
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LogEntryList(generics.ListCreateAPIView):
     serializer_class = LogEntrySerializer
     permission_classes = [permissions.IsAuthenticated]

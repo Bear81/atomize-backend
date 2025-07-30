@@ -109,16 +109,17 @@ REACT_APP_URL = os.environ.get("REACT_APP_URL")
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://atomize-frontend-e01055da979c.herokuapp.com",
 ]
-if REACT_APP_URL:
-    CORS_ALLOWED_ORIGINS.append(REACT_APP_URL)
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
+    "https://atomize-frontend-e01055da979c.herokuapp.com",
 ]
 
 if REACT_APP_URL:
-    CSRF_TRUSTED_ORIGINS.append(REACT_APP_URL.replace("https://", "http://"))
+    CORS_ALLOWED_ORIGINS.append(REACT_APP_URL)
+    CSRF_TRUSTED_ORIGINS.append(REACT_APP_URL)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
